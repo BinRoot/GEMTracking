@@ -2,9 +2,9 @@
 
 public class Driver {
 
-	static double hit1 = 0.03;
-	static double hit2 = 0.01;
-	static double hit3 = -0.01;
+	static double hit1 = 0.1;
+	static double hit2 = -0.2;
+	static double hit3 = 0.2;
 	static double hits[] = {hit1, hit2, hit3};
 	static int numPlanes = 3;
 	
@@ -28,7 +28,7 @@ public class Driver {
 			}
 		}
 		
-		System.out.println("get partitions: "+node.structure.partitions);
+		System.out.println("resolution: "+node.structure.partitions);
 		System.out.println(node.toString());
 		
 	}

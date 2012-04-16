@@ -75,7 +75,7 @@ public class BinTreeNode {
 	}
 
 	
-	
+	// TODO: fix me! Should not move left AND right!!
 	public void createChildren() {
 		GEMStructure struc = this.getStructure();
 		int partitions[] = struc.getPlaneHits();
