@@ -75,7 +75,7 @@ public class BinTreeNode {
 	}
 
 	
-	// TODO: fix me! Should not move left AND right!!
+	
 	public void createChildren() {
 		GEMStructure struc = this.getStructure();
 		int partitions[] = struc.getPlaneHits();
@@ -140,10 +140,11 @@ public class BinTreeNode {
 			newPartitions[i] = ip;
 		}
 		
-		//printNewPartitions(newPartitions);
+		printNewPartitions(newPartitions);
 		
-		
-		
+		// TODO: fix me! Should not move left AND right!!
+		// Also, this is not scalable
+		/*
 		for(int aa=newPartitions[0].update().leftPair; aa<=newPartitions[0].update().rightPair; aa++) {
 			for(int bb=newPartitions[1].update().leftPair; bb<=newPartitions[1].update().rightPair; bb++) {
 				for(int cc=newPartitions[2].update().leftPair; cc<=newPartitions[2].update().rightPair; cc++) {
@@ -153,7 +154,82 @@ public class BinTreeNode {
 					this.addChild(childNode);
 				}
 			}
+		}*/
+		
+		int path[] = new int[numPlanes];
+		
+		if(newPartitions[0].validLeft) {
+			path[0] = newPartitions[0].leftPair;
+			transverse(newPartitions, 1, 2, path, newPartitions[0].leftPair);
 		}
+		if(newPartitions[0].validLeft) {
+			path[0] = newPartitions[0].rightPair;
+			transverse(newPartitions, 1, 2, path, newPartitions[0].rightPair);
+		}
+
+	}
+	
+	/**
+	 * BUG: Only works one direction..
+	 * @param ips
+	 * @param level
+	 * @param direction 0= left, 1= right, 2= dont care
+	 * @param path
+	 * @param oldIndex
+	 */
+	public void transverse(IndexPair[] ips, int level, int dir, int[] path, int oldIndex) {
+		
+		if(level>=ips.length) {
+			for(int i=0; i<path.length; i++) {
+				System.out.println("-> "+path[i]);
+			}
+			System.out.println("done. ");
+			
+			BinTreeNode childNode = new BinTreeNode(new GEMStructure(path, this.structure.getNextPartitions()), numPlanes);
+			this.addChild(childNode);
+			
+			return; //base case
+		}
+		
+		IndexPair currentPair = ips[level];
+		
+		if(currentPair.validLeft) {
+			if((dir==1 && currentPair.leftPair>=oldIndex) || (dir==0 && currentPair.leftPair<=oldIndex)) {
+				path[level] = currentPair.leftPair;
+				transverse(ips, level+1, dir, path, currentPair.leftPair);
+			}
+			else if(dir==2 && currentPair.leftPair>oldIndex) {
+				path[level] = currentPair.leftPair;
+				transverse(ips, level+1, 1, path, currentPair.leftPair); // moving right
+			}
+			else if(dir==2 && currentPair.leftPair<oldIndex) {
+				path[level] = currentPair.leftPair;
+				transverse(ips, level+1, 0, path, currentPair.leftPair); // moving left
+			}
+			else if(dir==2 && currentPair.leftPair==oldIndex){
+				path[level] = currentPair.leftPair;
+				transverse(ips, level+1, 2, path, currentPair.leftPair); // moving dont care
+			}
+		}
+		if(currentPair.validRight) {
+			if((dir==1 && currentPair.rightPair>=oldIndex) || (dir==0 && currentPair.rightPair<=oldIndex)) {
+				path[level] = currentPair.rightPair;
+				transverse(ips, level+1, dir, path, currentPair.rightPair);
+			}
+			else if(dir==2 && currentPair.rightPair>oldIndex) {
+				path[level] = currentPair.rightPair;
+				transverse(ips, level+1, 1, path, currentPair.rightPair); // moving right
+			}
+			else if(dir==2 && currentPair.rightPair<oldIndex) {
+				path[level] = currentPair.rightPair;
+				transverse(ips, level+1, 0, path, currentPair.rightPair); // moving left
+			}
+			else if(dir==2 && currentPair.rightPair==oldIndex){
+				path[level] = currentPair.rightPair;
+				transverse(ips, level+1, 2, path, currentPair.rightPair); // moving dont care
+			}
+		}
+		
 	}
 	
 	
