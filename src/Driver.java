@@ -4,7 +4,7 @@ public class Driver {
 
 	static double hit1 = 0.1;
 	static double hit2 = -0.2;
-	static double hit3 = 0.2;
+	static double hit3 = -0.1;
 	static double hits[] = {hit1, hit2, hit3};
 	static int numPlanes = 3;
 	
@@ -19,7 +19,7 @@ public class Driver {
 			node.createChildren();
 			
 			BinTreeNode childNode = node.magnify(hits);
-			
+			//System.out.println("got child: "+childNode);
 			if(childNode == null) {
 				go = false;
 			}

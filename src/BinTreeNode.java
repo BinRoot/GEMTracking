@@ -41,12 +41,16 @@ public class BinTreeNode {
 			for(int j=0; j<hits.length; j++) {
 				if(childNode.matchesHit(j, hits[j]) == false) {
 					matchFailed = true;
-					continue;
+					break;
 				}
 			}
 			
 			if(matchFailed == false) {
+				//System.out.println("match successful");
 				return childNode;
+			}
+			else {
+				//System.out.println("match failed");
 			}
 		}
 		return null;
@@ -140,7 +144,7 @@ public class BinTreeNode {
 			newPartitions[i] = ip;
 		}
 		
-		printNewPartitions(newPartitions);
+		//printNewPartitions(newPartitions);
 		
 		// TODO: fix me! Should not move left AND right!!
 		// Also, this is not scalable
@@ -167,6 +171,8 @@ public class BinTreeNode {
 			transverse(newPartitions, 1, 2, path, newPartitions[0].rightPair);
 		}
 
+		
+		//System.out.println("created "+getChildren().size()+" children");
 	}
 	
 	/**
@@ -180,12 +186,15 @@ public class BinTreeNode {
 	public void transverse(IndexPair[] ips, int level, int dir, int[] path, int oldIndex) {
 		
 		if(level>=ips.length) {
+			int [] myPath = new int[path.length];
 			for(int i=0; i<path.length; i++) {
-				System.out.println("-> "+path[i]);
+				myPath[i] = path[i];
+				//System.out.println("-> "+path[i]);
 			}
-			System.out.println("done. ");
+			//System.out.println("done. ");
 			
-			BinTreeNode childNode = new BinTreeNode(new GEMStructure(path, this.structure.getNextPartitions()), numPlanes);
+			BinTreeNode childNode = new BinTreeNode(new GEMStructure(myPath, this.structure.getNextPartitions()), numPlanes);
+			
 			this.addChild(childNode);
 			
 			return; //base case
